@@ -12,7 +12,8 @@ var life = (function(){
 		aliveCellColor: '#000',
 		get pixelWidth() {return 1 + (this.width*this.cellWidth);},
 		get pixelHeight() {return 1 + (this.height*this.cellWidth);},
-		stepDuration: 50
+		stepDuration: 50,
+		cellType: 'circle'
 	};
 	
 	var canvas,
@@ -47,20 +48,36 @@ var life = (function(){
 		drawBoard();
 	}
 	
-	function drawAliveCell(p) {
-		var x = (p.x * config.cellWidth) + (config.cellWidth/2);
-		var y = (p.y * config.cellHeight) + (config.cellHeight/2);
+	function drawAliveCellCircle(cell) {
+		var x = (cell.x * config.cellWidth) + (config.cellWidth/2);
+		var y = (cell.y * config.cellHeight) + (config.cellHeight/2);
 		var radius = (config.cellWidth/2) - (config.cellWidth/10);
 		drawingContext.beginPath();
 		drawingContext.arc(x, y, radius, 0, Math.PI*2, false);
 		drawingContext.closePath();
-		
-		var style = config.aliveCellColor;
-	
-		drawingContext.strokeStyle = style;
+		drawingContext.strokeStyle = config.aliveCellColor;
 		drawingContext.stroke();
-		drawingContext.fillStyle = style;
+		drawingContext.fillStyle = config.aliveCellColor;
 		drawingContext.fill();
+	}
+	
+	function drawAliveCellRect(cell) {
+		var x = cell.x * config.cellWidth;
+		var y = cell.y * config.cellHeight;
+		
+		drawingContext.fillStyle = config.aliveCellColor;
+		drawingContext.fillRect(x + 1, y + 1, config.cellWidth - 1, config.cellHeight - 1)
+	}
+	
+	function getDrawFunc(cellType) {
+		switch (cellType) {
+			case 'circle':
+				return drawAliveCellCircle;
+			case 'rect':
+				return drawAliveCellRect;
+			default:
+				return drawAliveCellCircle;
+		}
 	}
 	
 	function drawBoard() {
@@ -77,8 +94,9 @@ var life = (function(){
 		drawingContext.strokeStyle = config.gridColor;
 		drawingContext.stroke();
 	
+		var draw = getDrawFunc(config.cellType)
 		for (var i = 0; i < aliveCells.length; i++) {
-			drawAliveCell(aliveCells[i]);
+			draw(aliveCells[i]);
 		}
 	}
 	
