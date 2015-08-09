@@ -27,7 +27,7 @@ var life = (function(){
 	}
 	
 	function cellExists(x, y) {
-		for (var i = 0; i < aliveCells.length; i++) {
+		for (var i = 0, len = aliveCells.length; i < len; i++) {
 			if ((aliveCells[i].y == y) && 
 				(aliveCells[i].x == x)) {
 				return i;
@@ -95,7 +95,7 @@ var life = (function(){
 		drawingContext.stroke();
 	
 		var draw = getDrawFunc(config.cellType)
-		for (var i = 0; i < aliveCells.length; i++) {
+		for (var i = 0, len = aliveCells.length; i < len; i++) {
 			draw(aliveCells[i]);
 		}
 	}
@@ -122,7 +122,7 @@ var life = (function(){
 	
 	function iterate() {
 		var del = [],
-			add = [];
+		    add = [];
 		
 		for(var row = 0; row < config.height; row++)
 			for (var col = 0; col < config.width; col++){
@@ -143,10 +143,10 @@ var life = (function(){
 		
 		del.sort(function(a, b){return b-a});
 		
-		for (var i = 0; i < del.length; i++) {
+		for (var i = 0, len = del.length; i < len; i++) {
 			aliveCells.splice(del[i], 1);
 		}
-		for (var i = 0; i < add.length; i++) {
+		for (var i = 0, len = add.length; i < len; i++) {
 			aliveCells.push(add[i]);
 		}
 		drawBoard();
@@ -180,7 +180,7 @@ var life = (function(){
 	function setFigure(offset, cells) {
 		offset = offset || 0;
 		
-		for (var i = 0; i < cells.length; i++) {
+		for (var i = 0, len = cells.length; i < len; i++) {
 			cells[i].x = offset.x + cells[i].x;
 			cells[i].y = offset.y + cells[i].y;
 		}
